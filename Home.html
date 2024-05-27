@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+          background-color: #FFFCF2;
+          font-family: Arial, sans-serif;
+          overflow-x: hidden;
+          transition: background-color 0.3s;
+        }
+        .hamburger {
+          cursor: pointer;
+          position: relative;
+          z-index: 2;
+        }
+        
+        .hamburger input {
+          display: none;
+        }
+        
+        .hamburger svg {
+          /* The size of the SVG defines the overall size */
+          height: 3em;
+          /* Define the transition for transforming the SVG */
+          transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .line {
+          fill: none;
+          stroke: #CCC5B9;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+          stroke-width: 3;
+          /* Define the transition for transforming the Stroke */
+          transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
+                      stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .line-top-bottom {
+          stroke-dasharray: 12 63;
+        }
+        
+        .hamburger input:checked + svg {
+          transform: rotate(-45deg);
+        }
+        
+        .hamburger input:checked + svg .line-top-bottom {
+          stroke-dasharray: 20 300;
+          stroke-dashoffset: -32.42;
+        }
+
+        .sidebar {
+          height: 100%;
+          width: 250px;
+          position: fixed;
+          top: 0;
+          left: -250px;
+          background-color: #252422;
+          overflow-x: hidden;
+          transition: left 0.3s;
+          padding-top: 60px;
+          color: white;
+          z-index: 1;
+        }
+
+        .sidebar a {
+          padding: 10px 15px;
+          text-decoration: none;
+          font-size: 25px;
+          color: #818181;
+          display: inline-block;
+          transition: color 0.3s;
+        }
+
+        .sidebar a:hover {
+          color: #f1f1f1;
+        }
+
+        .main-content {
+          margin-left: 20px;
+          padding: 16px;
+          transition: main-content 0.3s;
+        }
+        
+        .hamburger input:checked ~ .sidebar {
+          left: 0;
+        }
+        
+        .hamburger input:checked ~ .hamburger {
+          z-index: 3;
+        }
+
+        /* this line of code is for bright and dark theme */
+        .theme {
+            --bg-color: #403D39;
+            --main-color: #CCC5B9;
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--bg-color);
+            border-radius: 100%;
+            border: 2px solid var(--main-color);
+            box-shadow: 4px 4px var(--main-color);
+            transition: 0.15s ease;
+            left: 96%;
+        }
+
+        .input {
+            cursor: pointer;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            opacity: 0;
+            /* transition: 0.3s ease; */
+        }
+
+        .icon {
+            position: absolute;
+            top: calc(50% -13px);
+            left: calc(50% -13px);
+            width: 26px;
+            height: 26px;
+            /* transition: 0.3s ease; */
+        }
+
+        .icon.icon-moon {
+            fill: var(--main-color);
+        }
+
+        .icon.icon-sun {
+            stroke: var(--main-color);
+            display: none;
+        }
+
+        .input:checked ~ .icon.icon-sun {
+            display: block;
+            transition: 0.15s ease;
+        }
+
+        .input:checked ~ .icon.icon-moon {
+            display: none;
+            transition: 0.15s ease;
+        }
+
+        .theme:active {
+            box-shadow: 0px 0px var(--main-color);
+            transform: translate(3px, 3px);
+            transition: 0.15s ease;
+        }
+
+        .logo {
+          width: 50px;
+        }
+
+        .logo:hover {
+          cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- this one is the bright and dark theme -->
+    <label class="theme">
+      <input type="checkbox" id="checkbox" class="input">
+      <svg class="icon icon-sun" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24"><circle cx="12" cy="12" r="5"></circle><line x1="12" x2="12" y1="1" y2="3"></line><line x1="12" x2="12" y1="21" y2="23"></line><line x1="4.22" x2="5.64" y1="4.22" y2="5.64"></line><line x1="18.36" x2="19.78" y1="18.36" y2="19.78"></line><line x1="1" x2="3" y1="12" y2="12"></line><line x1="21" x2="23" y1="12" y2="12"></line><line x1="4.22" x2="5.64" y1="19.78" y2="18.36"></line><line x1="18.36" x2="19.78" y1="5.64" y2="4.22"></line></svg>
+      <svg class="icon icon-moon" viewBox="0 0 24 24"><path d="m12.3 4.9c.4-.2.6-.7.5-1.1s-.6-.8-1.1-.8c-4.9.1-8.7 4.1-8.7 9 0 5 4 9 9 9 3.8 0 7.1-2.4 8.4-5.9.2-.4 0-.9-.4-1.2s-.9-.2-1.2.1c-1 .9-2.3 1.4-3.7 1.4-3.1 0-5.7-2.5-5.7-5.7 0-1.9 1.1-3.8 2.9-4.8zm2.8 12.5c.5 0 1 0 1.4-.1-1.2 1.1-2.8 1.7-4.5 1.7-3.9 0-7-3.1-7-7 0-2.5 1.4-4.8 3.5-6-.7 1.1-1 2.4-1 3.8-.1 4.2 3.4 7.6 7.6 7.6z"></path></svg>
+  </label>
+
+
+    <label class="hamburger">
+        <input type="checkbox" id="check">
+        <svg viewBox="0 0 32 32">
+            <path class="line line-top-bottom" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"></path>
+            <path class="line" d="M7 16 27 16"></path>
+        </svg>
+    </label>
+
+    <img src="logo_no-bg.png" class="logo" id="reset">
+
+    <div class="sidebar" id="sidebar">
+      <br>
+      <br>
+    
+      <a href="Home.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-home"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home
+      </a>
+      <a href="#" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-music"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        Music
+      </a>
+      <a href="#" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+        Account
+      </a>
+      <a href="#" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-2"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>
+        Settings
+      </a>
+      <a href="https://ray.so" target="_blank">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Beautify Code
+      </a>
+      </div>
+
+    <div class="main-content" id="mainStuff">
+        <h2 id="header">Main Content</h2>
+        <p id="para">This is the main content area.</p>
+    </div>
+
+    <script>
+      document.getElementById('check').addEventListener('change', function() {
+          if (this.checked) {
+              document.getElementById('sidebar').style.left = '0';
+          } else {
+              document.getElementById('sidebar').style.left = '-250px';
+          }
+      });
+
+
+      //this code is for bright and dark theme
+      const checkbox = document.getElementById('checkbox');
+      const body = document.body;
+      const myH2 = document.getElementById('header');
+      const myP = document.getElementById('para');
+
+
+
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                body.style.backgroundColor = '#201f1e';
+                myH2.style.color = '#FFFCF2';
+                myP.style.color = '#FFFCF2';
+
+            }   
+            else {
+                body.style.backgroundColor = '#FFFCF2';
+                myH2.style.color = '#201f1e';
+                myP.style.color = '#201f1e';
+
+            }
+        });
+
+        //this code is for reseting the page
+
+        const reset = document.getElementById(`reset`);
+
+        reset.addEventListener('click', function() {
+          location.reload();
+        })
+  </script>
+</body>
+</html>
